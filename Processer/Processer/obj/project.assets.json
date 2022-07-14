@@ -8,25 +8,25 @@
     "net6.0": []
   },
   "packageFolders": {
-    "C:\\Users\\Kim Työ\\.nuget\\packages\\": {},
+    "C:\\Users\\Kim\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Kim Työ\\source\\repos\\Processer\\Processer\\Processer.csproj",
+      "projectUniqueName": "D:\\stuff\\- GITHUB -\\processer\\Processer\\Processer\\Processer.csproj",
       "projectName": "Processer",
-      "projectPath": "C:\\Users\\Kim Työ\\source\\repos\\Processer\\Processer\\Processer.csproj",
-      "packagesPath": "C:\\Users\\Kim Työ\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Kim Työ\\source\\repos\\Processer\\Processer\\obj\\",
+      "projectPath": "D:\\stuff\\- GITHUB -\\processer\\Processer\\Processer\\Processer.csproj",
+      "packagesPath": "C:\\Users\\Kim\\.nuget\\packages\\",
+      "outputPath": "D:\\stuff\\- GITHUB -\\processer\\Processer\\Processer\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\Kim Työ\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Kim\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -35,6 +35,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Users\\Kim\\.nuget\\packages": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

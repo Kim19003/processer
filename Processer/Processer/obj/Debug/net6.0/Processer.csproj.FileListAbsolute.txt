@@ -13,3 +13,18 @@ C:\Users\Kim Työ\source\repos\Processer\Processer\obj\Debug\net6.0\refint\Proce
 C:\Users\Kim Työ\source\repos\Processer\Processer\obj\Debug\net6.0\Processer.pdb
 C:\Users\Kim Työ\source\repos\Processer\Processer\obj\Debug\net6.0\Processer.genruntimeconfig.cache
 C:\Users\Kim Työ\source\repos\Processer\Processer\obj\Debug\net6.0\ref\Processer.dll
+D:\stuff\- GITHUB -\processer\Processer\Processer\bin\Debug\net6.0\Processer.exe
+D:\stuff\- GITHUB -\processer\Processer\Processer\bin\Debug\net6.0\Processer.deps.json
+D:\stuff\- GITHUB -\processer\Processer\Processer\bin\Debug\net6.0\Processer.runtimeconfig.json
+D:\stuff\- GITHUB -\processer\Processer\Processer\bin\Debug\net6.0\Processer.dll
+D:\stuff\- GITHUB -\processer\Processer\Processer\bin\Debug\net6.0\Processer.pdb
+D:\stuff\- GITHUB -\processer\Processer\Processer\obj\Debug\net6.0\Processer.csproj.AssemblyReference.cache
+D:\stuff\- GITHUB -\processer\Processer\Processer\obj\Debug\net6.0\Processer.GeneratedMSBuildEditorConfig.editorconfig
+D:\stuff\- GITHUB -\processer\Processer\Processer\obj\Debug\net6.0\Processer.AssemblyInfoInputs.cache
+D:\stuff\- GITHUB -\processer\Processer\Processer\obj\Debug\net6.0\Processer.AssemblyInfo.cs
+D:\stuff\- GITHUB -\processer\Processer\Processer\obj\Debug\net6.0\Processer.csproj.CoreCompileInputs.cache
+D:\stuff\- GITHUB -\processer\Processer\Processer\obj\Debug\net6.0\Processer.dll
+D:\stuff\- GITHUB -\processer\Processer\Processer\obj\Debug\net6.0\refint\Processer.dll
+D:\stuff\- GITHUB -\processer\Processer\Processer\obj\Debug\net6.0\Processer.pdb
+D:\stuff\- GITHUB -\processer\Processer\Processer\obj\Debug\net6.0\Processer.genruntimeconfig.cache
+D:\stuff\- GITHUB -\processer\Processer\Processer\obj\Debug\net6.0\ref\Processer.dll

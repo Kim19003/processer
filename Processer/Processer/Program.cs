@@ -3,80 +3,237 @@ using Kimbrary.Printing;
 
 while (true)
 {
-    PrintHeader();
+    Start:
+    PrintHeader("v1.0");
 
-    Print.AsWhite("(1) Print open processes with name\n(2) Kill open processes with name\n");
-
-    switch (Console.ReadKey().Key)
+    while (true)
     {
-        case ConsoleKey.D1:
-            PrintHeader();
+        Print.AsWhite(">> ");
+        string command = Read.AsWhite();
 
-            Print.AsWhite("Enter process name: ");
-            string printableProcessName = Read.AsDarkYellow("\n");
-            int printedProcesses = 0;
-            foreach (Process process in Process.GetProcesses())
+        if (command == "help")
+        {
+            Print.AsGray($"\nCommands:\n\n");
+            Print.AsGray($"'help' - display the help view\n'print' - print all processes\n'print [process name]' - print specific processes\n" +
+                $"'kill [process name]' - kill specific processes\n'clear' - clear the screen\n'exit' - exit the program\n");
+
+            Print.AsGray($"\nSearch formatting:\n\n");
+            Print.AsGray($"'^' - use before the query to ignore case sensitivity\n'*' - use before the query to do contained search (ignores case sensitivity)\n" +
+                $"'>all' - do for all\n\n");
+        }
+        else if (command == "print")
+        {
+            PrintProcesses(string.Empty, Processer.Model.SearchOption.All);
+        }
+        else if (command.StartsWith("print "))
+        {
+            string commandAction = command[(command.IndexOf(' ') + 1)..];
+
+            if (commandAction.Length > 1)
             {
-                if (process.ProcessName.ToLower().Contains(printableProcessName.ToLower()))
+                switch (commandAction[0])
                 {
-                    Print.AsDarkYellow($"{printedProcesses + 1}. {process.ProcessName} ({process.MachineName})\n");
-                    printedProcesses++;
+                    case '^':
+                        PrintProcesses(commandAction[1..], Processer.Model.SearchOption.IgnoreCase);
+                        break;
+                    case '*':
+                        PrintProcesses(commandAction[1..], Processer.Model.SearchOption.Contains);
+                        break;
+                    default:
+                        if (commandAction == ">all")
+                        {
+                            PrintProcesses(string.Empty, Processer.Model.SearchOption.All);
+                        }
+                        else
+                        {
+                            PrintProcesses(commandAction, Processer.Model.SearchOption.FullMatch);
+                        }
+                        break;
                 }
             }
-            if (printedProcesses > 0)
+            else if (commandAction.Length > 0)
             {
-                Print.AsWhite($"\nPrinted {printedProcesses} open processes with name ");
-                Print.AsDarkYellow($"{printableProcessName}\n");
+                PrintProcesses(commandAction, Processer.Model.SearchOption.FullMatch);
             }
             else
             {
-                Print.AsWhite($"Didn't find any open processes with name ");
-                Print.AsDarkYellow($"{printableProcessName}\n");
+                Print.AsWhite($"\nCommand action can't be empty\n\n");
             }
+        }
+        else if (command.StartsWith("kill "))
+        {
+            string commandAction = command[(command.IndexOf(' ') + 1)..];
 
-            Console.ReadLine();
-            break;
-        case ConsoleKey.D2:
-            PrintHeader();
-
-            Print.AsWhite("Enter process name: ");
-            string killableProcessName = Read.AsDarkYellow("\n");
-            int killedProcesses = 0;
-            foreach (Process process in Process.GetProcesses())
+            if (commandAction.Length > 1)
             {
-                if (process.ProcessName.ToLower().Contains(killableProcessName.ToLower()))
+                switch (commandAction[0])
                 {
-                    try
-                    {
-                        process.Kill();
-                        killedProcesses++;
-                    }
-                    catch
-                    {
-                    }
+                    case '^':
+                        KillProcesses(commandAction[1..], Processer.Model.SearchOption.IgnoreCase);
+                        break;
+                    case '*':
+                        KillProcesses(commandAction[1..], Processer.Model.SearchOption.Contains);
+                        break;
+                    default:
+                        if (commandAction == ">all")
+                        {
+                            KillProcesses(string.Empty, Processer.Model.SearchOption.All);
+                        }
+                        else
+                        {
+                            KillProcesses(commandAction);
+                        }
+                        break;
                 }
             }
-            if (killedProcesses > 0)
+            else if (commandAction.Length > 0)
             {
-                Print.AsWhite($"Killed {killedProcesses} open processes with name ");
-                Print.AsDarkYellow($"{killableProcessName}\n");
+                KillProcesses(commandAction);
             }
             else
             {
-                Print.AsWhite($"Didn't find any open processes with name ");
-                Print.AsDarkYellow($"{killableProcessName}\n");
+                Print.AsWhite($"\nCommand action can't be empty\n\n");
+            }
+        }
+        else if (command == "clear")
+        {
+            goto Start;
+        }
+        else if (command == "exit")
+        {
+            Environment.Exit(0);
+        }
+        else
+        {
+            Print.AsWhite($"\nCommand '{command}' not recognized\n\n");
+        }
+    }
+
+    Console.ReadLine();
+}
+
+static void PrintProcesses(string processName, Processer.Model.SearchOption searchOption = Processer.Model.SearchOption.All)
+{
+    int printedProcesses = 0;
+
+    foreach (Process process in Process.GetProcesses())
+    {
+        bool printThisProcess = false;
+
+        switch (searchOption)
+        {
+            case Processer.Model.SearchOption.FullMatch:
+                if (process.ProcessName == processName)
+                {
+                    printThisProcess = true;
+                }
+                break;
+            case Processer.Model.SearchOption.IgnoreCase:
+                if (process.ProcessName.ToLower() == processName.ToLower())
+                {
+                    printThisProcess = true;
+                }
+                break;
+            case Processer.Model.SearchOption.Contains:
+                if (process.ProcessName.ToLower().Contains(processName.ToLower()))
+                {
+                    printThisProcess = true;
+                }
+                break;
+            case Processer.Model.SearchOption.All:
+                printThisProcess = true;
+                break;
+        }
+
+        if (printThisProcess)
+        {
+            if (printedProcesses == 0)
+            {
+                Console.WriteLine("");
             }
 
-            Console.ReadLine();
-            break;
+            Print.AsWhite($"{printedProcesses + 1}. ");
+            Print.AsCyan($"{process.ProcessName}");
+            try
+            {
+                Print.AsWhite($" (started: {process.StartTime})");
+            }
+            catch
+            {
+            }
+            Console.WriteLine("");
+
+            printedProcesses++;
+        }
+    }
+    if (printedProcesses > 0)
+    {
+        Print.AsWhite($"\nPrinted {printedProcesses} open processes\n\n");
+    }
+    else
+    {
+        Print.AsWhite($"\nDidn't find any open processes to print\n\n");
     }
 }
 
-void PrintHeader()
+static void KillProcesses(string processName, Processer.Model.SearchOption searchOption = Processer.Model.SearchOption.FullMatch)
+{
+    int killedProcesses = 0;
+    foreach (Process process in Process.GetProcesses())
+    {
+        bool killThisProcess = false;
+
+        switch (searchOption)
+        {
+            case Processer.Model.SearchOption.FullMatch:
+                if (process.ProcessName == processName)
+                {
+                    killThisProcess = true;
+                }
+                break;
+            case Processer.Model.SearchOption.IgnoreCase:
+                if (process.ProcessName.ToLower() == processName.ToLower())
+                {
+                    killThisProcess = true;
+                }
+                break;
+            case Processer.Model.SearchOption.Contains:
+                if (process.ProcessName.ToLower().Contains(processName.ToLower()))
+                {
+                    killThisProcess = true;
+                }
+                break;
+            case Processer.Model.SearchOption.All:
+                killThisProcess = true;
+                break;
+        }
+
+        if (killThisProcess)
+        {
+            try
+            {
+                process.Kill();
+                killedProcesses++;
+            }
+            catch
+            {
+            }
+        }
+    }
+    if (killedProcesses > 0)
+    {
+        Print.AsWhite($"\nKilled {killedProcesses} open processes\n\n");
+    }
+    else
+    {
+        Print.AsWhite($"\nDidn't find any open processes to kill\n\n");
+    }
+}
+
+static void PrintHeader(string version)
 {
     Console.Clear();
 
-    Print.AsWhite("≡≡≡≡≡");
-    Print.AsDarkYellow(" PROCESSER ");
-    Print.AsWhite("≡≡≡≡≡\n\n");
+    Print.AsCyan("PROCESSER ");
+    Print.AsWhite($"({version})\n\n");
 }
