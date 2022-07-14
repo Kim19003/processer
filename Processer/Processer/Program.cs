@@ -14,16 +14,12 @@ while (true)
         if (command == "help")
         {
             Print.AsGray($"\nCommands:\n\n");
-            Print.AsGray($"'help' - display the help view\n'print' - print all processes\n'print [process name]' - print specific processes\n" +
+            Print.AsGray($"'help' - display the help view\n'print [process name]' - print specific processes\n" +
                 $"'kill [process name]' - kill specific processes\n'clear' - clear the screen\n'exit' - exit the program\n");
 
             Print.AsGray($"\nSearch formatting:\n\n");
             Print.AsGray($"'^' - use before the query to ignore case sensitivity\n'*' - use before the query to do contained search (ignores case sensitivity)\n" +
                 $"'>all' - do for all\n\n");
-        }
-        else if (command == "print")
-        {
-            PrintProcesses(string.Empty, Processer.Model.SearchOption.All);
         }
         else if (command.StartsWith("print "))
         {
