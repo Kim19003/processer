@@ -317,7 +317,7 @@ void OpenFile(string fileName, Processer.Model.SearchOption searchOption = Proce
         };
         process.Start();
 
-        Print.AsWhite($"\nOpened {Path.GetFileName(foundFilePath)}\n\n");
+        Print.AsWhite($"\nOpened '{Path.GetFileName(foundFilePath)}'\n\n");
     }
     else
     {
