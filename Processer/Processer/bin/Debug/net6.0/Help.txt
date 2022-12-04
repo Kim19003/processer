@@ -1,0 +1,17 @@
+Commands:
+
+'help' - display the help view
+'print [process name / argument]' - print specific processes or files
+'kill [process name / argument]' - kill specific processes
+'open [file name]' - open specific file in the specified files folder
+'clear' - clear the screen
+'exit' - exit the program
+
+Search formatting:
+
+'^' - use before the query to ignore case sensitivity
+'*' - use before the query to do contained search (ignores case sensitivity)
+
+Arguments:
+'>files' - do for all files
+'>all' - do for all processes

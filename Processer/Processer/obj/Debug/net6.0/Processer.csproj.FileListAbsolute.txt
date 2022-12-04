@@ -28,3 +28,5 @@ D:\stuff\- GITHUB -\processer\Processer\Processer\obj\Debug\net6.0\refint\Proces
 D:\stuff\- GITHUB -\processer\Processer\Processer\obj\Debug\net6.0\Processer.pdb
 D:\stuff\- GITHUB -\processer\Processer\Processer\obj\Debug\net6.0\Processer.genruntimeconfig.cache
 D:\stuff\- GITHUB -\processer\Processer\Processer\obj\Debug\net6.0\ref\Processer.dll
+D:\stuff\- GITHUB -\processer\Processer\Processer\bin\Debug\net6.0\Newtonsoft.Json.dll
+D:\stuff\- GITHUB -\processer\Processer\Processer\obj\Debug\net6.0\Processer.csproj.CopyComplete

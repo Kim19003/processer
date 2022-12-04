@@ -1,5 +1,14 @@
 ﻿using System.Diagnostics;
 using Kimbrary.Printing;
+using Newtonsoft.Json;
+using Processer.Model;
+
+if (!File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings.json")))
+{
+    File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings.json"), "{\n\t\"FilesFolderPath\":\"\"\n}");
+}
+
+Settings settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings.json"))) ?? new();
 
 while (true)
 {
@@ -13,13 +22,14 @@ while (true)
 
         if (command == "help")
         {
-            Print.AsGray($"\nCommands:\n\n");
-            Print.AsGray($"'help' - display the help view\n'print [process name]' - print specific processes\n" +
-                $"'kill [process name]' - kill specific processes\n'clear' - clear the screen\n'exit' - exit the program\n");
-
-            Print.AsGray($"\nSearch formatting:\n\n");
-            Print.AsGray($"'^' - use before the query to ignore case sensitivity\n'*' - use before the query to do contained search (ignores case sensitivity)\n" +
-                $"'>all' - do for all\n\n");
+            try
+            {
+                Print.AsGray($"\n{File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Help.txt"))}\n\n");
+            }
+            catch
+            {
+                Print.AsGray("\nCan't find the Help.txt file...\n\n");
+            }
         }
         else if (command.StartsWith("print "))
         {
@@ -39,6 +49,10 @@ while (true)
                         if (commandAction == ">all")
                         {
                             PrintProcesses(string.Empty, Processer.Model.SearchOption.All);
+                        }
+                        else if (commandAction == ">files")
+                        {
+                            PrintFiles();
                         }
                         else
                         {
@@ -85,6 +99,34 @@ while (true)
             else if (commandAction.Length > 0)
             {
                 KillProcesses(commandAction);
+            }
+            else
+            {
+                Print.AsWhite($"\nCommand action can't be empty\n\n");
+            }
+        }
+        else if (command.StartsWith("open "))
+        {
+            string commandAction = command[(command.IndexOf(' ') + 1)..];
+
+            if (commandAction.Length > 1)
+            {
+                switch (commandAction[0])
+                {
+                    case '^':
+                        OpenFile(commandAction[1..], Processer.Model.SearchOption.IgnoreCase);
+                        break;
+                    case '*':
+                        OpenFile(commandAction[1..], Processer.Model.SearchOption.Contains);
+                        break;
+                    default:
+                        OpenFile(commandAction);
+                        break;
+                }
+            }
+            else if (commandAction.Length > 0)
+            {
+                OpenFile(commandAction);
             }
             else
             {
@@ -162,6 +204,7 @@ static void PrintProcesses(string processName, Processer.Model.SearchOption sear
             printedProcesses++;
         }
     }
+    
     if (printedProcesses > 0)
     {
         Print.AsWhite($"\nPrinted {printedProcesses} open processes\n\n");
@@ -223,6 +266,91 @@ static void KillProcesses(string processName, Processer.Model.SearchOption searc
     else
     {
         Print.AsWhite($"\nDidn't find any open processes to kill\n\n");
+    }
+}
+
+void OpenFile(string fileName, Processer.Model.SearchOption searchOption = Processer.Model.SearchOption.FullMatch)
+{
+    string foundFilePath = string.Empty;
+
+    foreach (string file in Directory.GetFiles(settings.FilesFolderPath))
+    {
+        if (!string.IsNullOrEmpty(foundFilePath))
+        {
+            break;
+        }
+
+        string currentFileName = Path.GetFileName(file);
+        //string currentFileNameWithoutExtension = currentFileName[..currentFileName.LastIndexOf('.')];
+        
+        switch (searchOption)
+        {
+            case Processer.Model.SearchOption.FullMatch:
+                if (currentFileName == fileName)
+                {
+                    foundFilePath = Path.Combine(settings.FilesFolderPath, currentFileName);
+                }
+                break;
+            case Processer.Model.SearchOption.IgnoreCase:
+                if (currentFileName.ToLower() == fileName.ToLower())
+                {
+                    foundFilePath = Path.Combine(settings.FilesFolderPath, currentFileName);
+                }
+                break;
+            case Processer.Model.SearchOption.Contains:
+                if (currentFileName.ToLower().Contains(fileName.ToLower()))
+                {
+                    foundFilePath = Path.Combine(settings.FilesFolderPath, currentFileName);
+                }
+                break;
+        }
+    }
+
+    if (!string.IsNullOrEmpty(foundFilePath))
+    {
+        Process process = new()
+        {
+            StartInfo = new ProcessStartInfo(foundFilePath)
+            {
+                UseShellExecute = true
+            }
+        };
+        process.Start();
+
+        Print.AsWhite($"\nOpened {Path.GetFileName(foundFilePath)}\n\n");
+    }
+    else
+    {
+        Print.AsWhite($"\nDidn't find any file to open\n\n");
+    }
+}
+
+void PrintFiles()
+{
+    int printedFiles = 0;
+
+    foreach (string file in Directory.GetFiles(settings.FilesFolderPath))
+    {
+        string currentFileName = Path.GetFileName(file);
+
+        if (printedFiles == 0)
+        {
+            Console.WriteLine("");
+        }
+
+        Print.AsWhite($"{printedFiles + 1}. ");
+        Print.AsCyan($"{currentFileName}\n");
+
+        printedFiles++;
+    }
+    
+    if (printedFiles > 0)
+    {
+        Print.AsWhite($"\nPrinted {printedFiles} files in the specified files folder\n\n");
+    }
+    else
+    {
+        Print.AsWhite($"\nDidn't find any files to print in the specified files folder\n\n");
     }
 }
 
